@@ -1,11 +1,38 @@
-# Hotel Booking Website
+# Owerri Grandeur Hotel Website
 
-A responsive hotel website built with HTML, Tailwind CSS, and JavaScript.
+A modern, fully responsive hotel website showcasing rooms, dining, locations, and services for Owerri Grandeur Hotel.
 
-## Features
-- Room listings
-- Responsive design
-- Booking/contact section
+**[🌐 Live Demo](https://graceful-twilight-a4c288.netlify.app/)**
 
-## Live Demo
-https://graceful-twilight-a4c288.netlify.app/
+---
+
+## 📋 Overview
+
+Owerri Grandeur Hotel Website is a professionally designed hotel booking and information portal built with modern web technologies. The site provides an intuitive user experience for browsing rooms, exploring dining options, viewing photo galleries, and contacting the hotel.
+
+---
+
+## 🛠 Tech Stack
+
+- **HTML5** - Semantic markup and structure
+- **Tailwind CSS** - Utility-first CSS framework for responsive design
+- **JavaScript** - Interactive features and dynamic functionality
+- **Hosted on** - Netlify
+
+---
+
+## ✨ Features
+
+- **🏨 Rooms Showcase** - Browse available rooms with descriptions and amenities
+- **🍽️ Dining Options** - Explore restaurant and bar offerings
+- **📸 Photo Gallery** - Visual tour of hotel facilities
+- **📍 Multiple Locations** - View different hotel branches
+- **📧 Contact Form** - Easy way to reach the hotel
+- **📱 Fully Responsive** - Optimized for all devices (mobile, tablet, desktop)
+- **🎨 Modern Design** - Clean, professional UI with smooth animations
+- **⚡ Fast Performance** - Lightweight and optimized assets
+- **🔒 Privacy & Legal** - Includes Privacy Policy, Terms, and Cookie Policy
+
+---
+
+## 📂 Project Structure
