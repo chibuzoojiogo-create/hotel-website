@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cookie Policy | Owerri Grandeur</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Albert+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@300,0&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #00113a; --navy-deep: #000d2b; --gold: #a07830; --gold-lt: #e9c176;
+    --cream: #faf9f6; --paper: #f2ede4; --ink: #1a1c1a; --muted: #6b6760;
+    --border: #d4d0c8; --white: #ffffff;
+    --serif: 'Libre Baskerville', Georgia, serif;
+    --sans: 'Albert Sans', sans-serif;
+    --shadow-sm: 0 4px 16px rgba(0,17,58,0.06);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--ink); font-family: var(--sans); line-height: 1.7; overflow-x: hidden; }
+  nav.topnav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(250,249,246,0.88); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(0,17,58,0.06); box-shadow: var(--shadow-sm); }
+  .nav-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; padding: 0 40px; height: 76px; }
+  .nav-logo { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--navy); text-decoration: none; }
+  .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+  .nav-links a { font-family: var(--serif); font-size: 15px; color: var(--navy); text-decoration: none; opacity: 0.75; transition: opacity 0.2s; }
+  .nav-links a:hover { opacity: 1; }
+  .nav-cta { background: var(--navy); color: var(--white); padding: 12px 28px; font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; }
+  .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 36px; height: 36px; background: none; border: none; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--navy); border-radius: 2px; transition: transform 0.35s, opacity 0.25s, width 0.3s; transform-origin: center; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,17,58,0.45); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.35s; }
+  .sidebar-overlay.visible { opacity: 1; pointer-events: all; }
+  .sidebar { position: fixed; top: 0; right: 0; width: min(320px,85vw); height: 100dvh; background: var(--cream); z-index: 100; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.77,0,0.175,1); display: flex; flex-direction: column; box-shadow: -8px 0 40px rgba(0,17,58,0.15); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 28px; border-bottom: 1px solid var(--border); }
+  .sidebar-logo { font-family: var(--serif); font-size: 16px; font-weight: 700; color: var(--navy); text-decoration: none; }
+  .sidebar-close { background: none; border: none; cursor: pointer; color: var(--navy); line-height: 0; padding: 4px; opacity: 0.6; }
+  .sidebar-links { list-style: none; padding: 32px 28px; flex: 1; }
+  .sidebar-links li { border-bottom: 1px solid var(--border); }
+  .sidebar-links a { display: flex; justify-content: space-between; align-items: center; font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--navy); text-decoration: none; padding: 20px 0; opacity: 0.75; transition: opacity 0.2s, color 0.2s, padding-left 0.25s; }
+  .sidebar-links a .material-symbols-outlined { font-size: 16px; opacity: 0.3; }
+  .sidebar-links a:hover { opacity: 1; color: var(--gold); padding-left: 6px; }
+  .sidebar-footer { padding: 28px; border-top: 1px solid var(--border); }
+  .sidebar-cta { width: 100%; background: var(--navy); color: var(--white); border: none; padding: 18px; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; }
+  .page-hero { padding-top: 76px; background: var(--navy); min-height: 300px; display: flex; align-items: flex-end; position: relative; overflow: hidden; }
+  .page-hero::before { content: ''; position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1621293954908-907159247fc8?w=1600&q=80&fit=crop') center/cover no-repeat; opacity: 0.1; }
+  .page-hero-inner { max-width: 1280px; margin: 0 auto; padding: 56px 40px; width: 100%; position: relative; z-index: 1; }
+  .page-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.42em; text-transform: uppercase; color: var(--gold-lt); display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .page-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold-lt); opacity: 0.5; }
+  .page-hero h1 { font-family: var(--serif); font-size: clamp(30px, 4vw, 52px); font-weight: 700; color: var(--white); letter-spacing: -0.02em; line-height: 1.1; }
+  .page-hero p { font-size: 13px; color: rgba(255,255,255,0.45); margin-top: 12px; }
+  .policy-wrap { max-width: 820px; margin: 0 auto; padding: 80px 40px 120px; }
+  .policy-intro { background: var(--paper); border-left: 3px solid var(--gold); padding: 28px 32px; margin-bottom: 56px; }
+  .policy-intro p { font-size: 14px; line-height: 1.85; color: var(--muted); font-weight: 300; }
+  .policy-intro strong { color: var(--navy); font-weight: 600; }
+  .policy-section { margin-bottom: 48px; }
+  .policy-section h2 { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+  .policy-section h2 .num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--gold); color: var(--white); font-size: 11px; font-weight: 700; font-family: var(--sans); flex-shrink: 0; }
+  .policy-section p { font-size: 14px; line-height: 1.9; color: var(--muted); font-weight: 300; margin-bottom: 14px; }
+  .policy-section ul { list-style: none; margin: 12px 0 14px; }
+  .policy-section ul li { font-size: 14px; line-height: 1.8; color: var(--muted); font-weight: 300; padding: 6px 0 6px 20px; position: relative; border-bottom: 1px solid var(--border); }
+  .policy-section ul li:last-child { border-bottom: none; }
+  .policy-section ul li::before { content: '—'; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
+
+  /* Cookie type table */
+  .cookie-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  .cookie-table th { background: var(--navy); color: var(--white); padding: 12px 16px; text-align: left; font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; }
+  .cookie-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--muted); font-weight: 300; line-height: 1.6; }
+  .cookie-table tr:last-child td { border-bottom: none; }
+  .cookie-table tr:hover td { background: var(--paper); }
+
+  /* Cookie preference toggle area */
+  .cookie-prefs {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    padding: 32px;
+    margin-top: 48px;
+  }
+  .cookie-prefs h3 { font-family: var(--serif); font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .cookie-prefs p { font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.75; margin-bottom: 24px; }
+  .pref-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-top: 1px solid var(--border); }
+  .pref-label { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .pref-sub { font-size: 12px; color: var(--muted); font-weight: 300; margin-top: 2px; }
+  .toggle-wrap { display: flex; align-items: center; gap: 10px; }
+  .toggle { position: relative; width: 44px; height: 24px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; inset: 0; background: var(--border); border-radius: 24px; cursor: pointer; transition: background 0.3s; }
+  .toggle-slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: var(--white); border-radius: 50%; transition: transform 0.3s; }
+  .toggle input:checked + .toggle-slider { background: var(--gold); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+  .toggle-label { font-size: 11px; color: var(--muted); font-weight: 500; }
+  .save-prefs { margin-top: 24px; background: var(--navy); color: var(--white); border: none; padding: 14px 28px; font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background 0.25s; }
+  .save-prefs:hover { background: var(--gold); }
+
+  .contact-box { background: var(--navy); padding: 40px; margin-top: 56px; }
+  .contact-box h3 { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 12px; }
+  .contact-box p { font-size: 14px; color: rgba(255,255,255,0.55); font-weight: 300; line-height: 1.8; margin-bottom: 8px; }
+  .contact-box a { color: var(--gold-lt); text-decoration: none; }
+  footer { background: var(--navy-deep); color: var(--white); padding: 80px 40px 0; }
+  .footer-bottom { max-width: 1280px; margin: 0 auto; padding: 24px 0; border-top: 1px solid rgba(250,249,246,0.08); text-align: center; }
+  .footer-bottom p { font-size: 10px; font-weight: 300; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(250,249,246,0.3); }
+  .footer-links { display: flex; justify-content: center; gap: 32px; padding: 32px 0; flex-wrap: wrap; }
+  .footer-links a { font-size: 12px; color: rgba(250,249,246,0.45); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold-lt); }
+  .scroll-top { position: fixed; bottom: 32px; right: 32px; width: 46px; height: 46px; background: var(--navy); color: var(--white); border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 40; box-shadow: 0 4px 16px rgba(0,17,58,0.25); opacity: 0; transform: translateY(12px); transition: opacity 0.3s, transform 0.3s; pointer-events: none; }
+  .scroll-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+  .scroll-top:hover { background: var(--gold); }
+  .scroll-top .material-symbols-outlined { font-size: 20px; }
+  @media (max-width: 768px) { .nav-links, .nav-cta { display: none; } .hamburger { display: flex; } .nav-inner { padding: 0 20px; } .policy-wrap { padding: 56px 20px 80px; } .page-hero-inner { padding: 48px 20px; } .footer-links { gap: 16px; } .cookie-table { font-size: 12px; } .cookie-table th, .cookie-table td { padding: 10px 12px; } }
+</style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a href="index.html" class="sidebar-logo">Owerri Grandeur</a>
+    <button class="sidebar-close" id="sidebarClose"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <ul class="sidebar-links">
+    <li><a href="index.html">Home <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="rooms.html">Rooms <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="dining.html">Dining <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="contact.html">Contact <span class="material-symbols-outlined">arrow_forward</span></a></li>
+  </ul>
+  <div class="sidebar-footer"><button class="sidebar-cta">Book Now</button></div>
+</aside>
+
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Owerri Grandeur</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="rooms.html">Rooms</a></li>
+      <li><a href="dining.html">Dining</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-cta">Book Now</button>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <p class="page-eyebrow">Legal</p>
+    <h1>Cookie Policy</h1>
+    <p>Last updated: March 2025</p>
+  </div>
+</div>
+
+<div class="policy-wrap">
+
+  <div class="policy-intro">
+    <p>This Cookie Policy explains how <strong>Owerri Grandeur Hotels Limited</strong> uses cookies and similar technologies on our website. We believe in being straightforward about this — cookies help us give you a better experience, and we want you to understand exactly how.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span class="num">1</span> What Are Cookies?</h2>
+    <p>Cookies are small text files that are placed on your device (computer, phone or tablet) when you visit a website. They are widely used to make websites work more efficiently, remember your preferences and provide information to website owners about how their site is being used.</p>
+    <p>Cookies cannot run programmes or deliver viruses to your device. They are unique to your browser and are not personally identifiable on their own — though they may be combined with other information to identify you.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span class="num">2</span> Types of Cookies We Use</h2>
+    <p>We use four categories of cookies on our website:</p>
+    <table class="cookie-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Purpose</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Essential Cookies</strong></td>
+          <td>Required for the website to function. Enables booking forms, login sessions and security features. Cannot be disabled.</td>
+          <td>Session / 1 year</td>
+        </tr>
+        <tr>
+          <td><strong>Performance Cookies</strong></td>
+          <td>Help us understand how visitors interact with our website — which pages are most visited, where users drop off and how fast pages load. Data is anonymous.</td>
+          <td>Up to 2 years</td>
+        </tr>
+        <tr>
+          <td><strong>Functional Cookies</strong></td>
+          <td>Remember your preferences such as language, currency and previously entered booking details to save you time on future visits.</td>
+          <td>Up to 1 year</td>
+        </tr>
+        <tr>
+          <td><strong>Marketing Cookies</strong></td>
+          <td>Used to show you relevant advertisements on other platforms based on your interest in our services. Set by trusted third-party advertising partners.</td>
+          <td>Up to 90 days</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="policy-section">
+    <h2><span class="num">3</span> Third-Party Cookies</h2>
+    <p>Some cookies on our website are set by third-party services that appear on our pages. These include:</p>
+    <ul>
+      <li><strong style="color:var(--navy);">Google Analytics</strong> — measures website traffic and usage patterns (performance cookies)</li>
+      <li><strong style="color:var(--navy);">Meta Pixel (Facebook/Instagram)</strong> — measures the effectiveness of our advertising (marketing cookies)</li>
+      <li><strong style="color:var(--navy);">Google Maps</strong> — embedded maps on our Locations page (functional cookies)</li>
+      <li><strong style="color:var(--navy);">Payment processors</strong> — Paystack and Flutterwave set essential cookies to process secure transactions</li>
+    </ul>
+    <p>These third parties have their own privacy and cookie policies which we encourage you to review.</p>
+  </div>
+
+  <div class="policy-section">
+    <h2><span class="num">4</span> Managing Your Cookie Preferences</h2>
+    <p>You can control which non-essential cookies are placed on your device using the preference centre below. You can also manage cookies through your browser settings — most browsers allow you to refuse cookies, delete existing cookies or be notified when a new cookie is set.</p>
+    <p>Please note that refusing certain cookies may affect the functionality of our website. Essential cookies cannot be disabled as the website will not work without them.</p>
+
+    <!-- Cookie preference toggles -->
+    <div class="cookie-prefs">
+      <h3>Your Cookie Preferences</h3>
+      <p>Toggle each category on or off, then save your preferences. Your choice will be remembered for 12 months.</p>
+
+      <div class="pref-row">
+        <div>
+          <div class="pref-label">Essential Cookies</div>
+          <div class="pref-sub">Required for the website to work. Always on.</div>
+        </div>
+        <div class="toggle-wrap">
+          <span class="toggle-label">Always On</span>
+        </div>
+      </div>
+
+      <div class="pref-row">
+        <div>
+          <div class="pref-label">Performance Cookies</div>
+          <div class="pref-sub">Help us improve the website by analysing usage.</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="perfCookie" checked/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="pref-row">
+        <div>
+          <div class="pref-label">Functional Cookies</div>
+          <div class="pref-sub">Remember your preferences for a better experience.</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="funcCookie" checked/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="pref-row">
+        <div>
+          <div class="pref-label">Marketing Cookies</div>
+          <div class="pref-sub">Used to show you relevant ads on other platforms.</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="mktCookie"/>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <button class="save-prefs" onclick="savePrefs()">Save My Preferences</button>
+    </div>
+  </div>
+
+  <div class="policy-section">
+    <h2><span class="num">5</span> Changes to This Policy</h2>
+    <p>We may update this Cookie Policy from time to time as our website or applicable law changes. We will notify you of significant changes by posting a notice on our homepage. We encourage you to review this page periodically.</p>
+  </div>
+
+  <div class="contact-box">
+    <h3>Questions About Cookies?</h3>
+    <p>If you have any questions about how we use cookies, please get in touch:</p>
+    <p><strong style="color:var(--white);">Owerri Grandeur Hotels Limited</strong><br/>
+    Email: <a href="/cdn-cgi/l/email-protection#6010120916010319200c01070f130712010e040515124e030f0d"><span class="__cf_email__" data-cfemail="3747455e4156544e775b5650584450455659535242451954585a">[email&#160;protected]</span></a><br/>
+    Phone: <a href="tel:+2341700000">+234 (0) 1 700 0000</a></p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="rooms.html">Rooms</a>
+    <a href="dining.html">Dining</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms &amp; Conditions</a>
+    <a href="cookies.html">Cookie Policy</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="footer-bottom"><p>© 2024 Owerri Grandeur Hotels Limited. All Rights Reserved. RC 789012, CAC Nigeria — Imo State.</p></div>
+</footer>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+  <span class="material-symbols-outlined">arrow_upward</span>
+</button>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  var hamburger = document.getElementById('hamburger');
+  var sidebar = document.getElementById('sidebar');
+  var overlay = document.getElementById('sidebarOverlay');
+  var closeBtn = document.getElementById('sidebarClose');
+  function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('visible'); hamburger.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('visible'); hamburger.classList.remove('open'); document.body.style.overflow = ''; }
+  hamburger.addEventListener('click', openSidebar);
+  closeBtn.addEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeSidebar(); });
+
+  var scrollTopBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', function() {
+    scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  /* Save cookie preferences — shows a quick confirmation message */
+  function savePrefs() {
+    var btn = document.querySelector('.

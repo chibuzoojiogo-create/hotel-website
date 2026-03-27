@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Locations | Owerri Grandeur</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Albert+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@300,0&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy:      #00113a;
+    --navy-deep: #000d2b;
+    --gold:      #a07830;
+    --gold-lt:   #e9c176;
+    --cream:     #faf9f6;
+    --paper:     #f2ede4;
+    --surface:   #efeeeb;
+    --ink:       #1a1c1a;
+    --muted:     #6b6760;
+    --border:    #d4d0c8;
+    --white:     #ffffff;
+    --serif: 'Libre Baskerville', Georgia, serif;
+    --sans:  'Albert Sans', sans-serif;
+    --shadow-sm: 0 4px 16px rgba(0,17,58,0.06);
+    --shadow-md: 0 12px 40px rgba(0,17,58,0.09);
+    --shadow-lg: 0 24px 64px rgba(0,17,58,0.12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--ink); font-family: var(--sans); line-height: 1.7; overflow-x: hidden; }
+  img { display: block; max-width: 100%; }
+
+  /* NAV — same as all pages */
+  nav.topnav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(250,249,246,0.88); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(0,17,58,0.06); box-shadow: var(--shadow-sm); }
+  .nav-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; padding: 0 40px; height: 76px; }
+  .nav-logo { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--navy); text-decoration: none; letter-spacing: -0.01em; }
+  .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+  .nav-links a { font-family: var(--serif); font-size: 15px; color: var(--navy); text-decoration: none; opacity: 0.75; transition: opacity 0.2s, color 0.2s; position: relative; }
+  .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 2px; background: var(--gold); transition: width 0.3s ease; }
+  .nav-links a:hover { opacity: 1; } .nav-links a:hover::after { width: 100%; }
+  .nav-links a.active { opacity: 1; color: var(--gold); font-weight: 700; } .nav-links a.active::after { width: 100%; }
+  .nav-cta { background: var(--navy); color: var(--white); padding: 12px 28px; font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; position: relative; overflow: hidden; transition: box-shadow 0.3s; }
+  .nav-cta::after { content: ''; position: absolute; inset: 0; background: var(--gold); transform: translateX(-101%); transition: transform 0.38s cubic-bezier(0.77,0,0.175,1); }
+  .nav-cta:hover { box-shadow: 0 4px 20px rgba(0,17,58,0.25); } .nav-cta:hover::after { transform: translateX(0); }
+  .nav-cta span { position: relative; z-index: 1; }
+  .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 36px; height: 36px; background: none; border: none; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--navy); border-radius: 2px; transition: transform 0.35s cubic-bezier(0.77,0,0.175,1), opacity 0.25s, width 0.3s; transform-origin: center; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,17,58,0.45); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.35s; backdrop-filter: blur(2px); }
+  .sidebar-overlay.visible { opacity: 1; pointer-events: all; }
+  .sidebar { position: fixed; top: 0; right: 0; width: min(320px,85vw); height: 100dvh; background: var(--cream); z-index: 100; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.77,0,0.175,1); display: flex; flex-direction: column; box-shadow: -8px 0 40px rgba(0,17,58,0.15); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 28px; border-bottom: 1px solid var(--border); }
+  .sidebar-logo { font-family: var(--serif); font-size: 16px; font-weight: 700; color: var(--navy); text-decoration: none; }
+  .sidebar-close { background: none; border: none; cursor: pointer; color: var(--navy); line-height: 0; padding: 4px; opacity: 0.6; transition: opacity 0.2s; }
+  .sidebar-close:hover { opacity: 1; } .sidebar-close .material-symbols-outlined { font-size: 22px; }
+  .sidebar-links { list-style: none; padding: 32px 28px; flex: 1; }
+  .sidebar-links li { border-bottom: 1px solid var(--border); }
+  .sidebar-links a { display: flex; justify-content: space-between; align-items: center; font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--navy); text-decoration: none; padding: 20px 0; opacity: 0.75; transition: opacity 0.2s, color 0.2s, padding-left 0.25s; }
+  .sidebar-links a .material-symbols-outlined { font-size: 16px; opacity: 0.3; transition: opacity 0.2s, transform 0.25s; }
+  .sidebar-links a:hover { opacity: 1; color: var(--gold); padding-left: 6px; }
+  .sidebar-links a:hover .material-symbols-outlined { opacity: 1; transform: translateX(4px); }
+  .sidebar-links a.active { opacity: 1; color: var(--gold); }
+  .sidebar-footer { padding: 28px; border-top: 1px solid var(--border); }
+  .sidebar-cta { width: 100%; background: var(--navy); color: var(--white); border: none; padding: 18px; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background 0.25s; }
+  .sidebar-cta:hover { background: var(--gold); }
+
+  /* PAGE HERO */
+  .page-hero { padding-top: 76px; background: var(--navy); min-height: 380px; display: flex; align-items: flex-end; position: relative; overflow: hidden; }
+  .page-hero::before { content: ''; position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1621293954908-907159247fc8?w=1600&q=80&fit=crop') center/cover no-repeat; opacity: 0.15; }
+  .page-hero-inner { max-width: 1280px; margin: 0 auto; padding: 64px 40px; width: 100%; position: relative; z-index: 1; }
+  .page-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.42em; text-transform: uppercase; color: var(--gold-lt); display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .page-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold-lt); opacity: 0.5; }
+  .page-hero h1 { font-family: var(--serif); font-size: clamp(36px, 5vw, 64px); font-weight: 700; color: var(--white); letter-spacing: -0.02em; line-height: 1.1; }
+  .page-hero h1 em { font-style: italic; font-weight: 400; color: var(--gold-lt); }
+
+  /* ── LOCATIONS ── */
+  .locations-wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 96px 40px 120px;
+  }
+
+  .intro-text {
+    max-width: 600px;
+    margin-bottom: 80px;
+  }
+  .intro-text .eyebrow { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  .intro-text .eyebrow .line { width: 32px; height: 1px; background: var(--gold); }
+  .intro-text .eyebrow span { font-size: 9px; font-weight: 700; letter-spacing: 0.42em; text-transform: uppercase; color: var(--gold); }
+  .intro-text h2 { font-family: var(--serif); font-size: clamp(28px, 3vw, 42px); font-weight: 700; color: var(--navy); line-height: 1.2; margin-bottom: 20px; letter-spacing: -0.01em; }
+  .intro-text h2 em { font-style: italic; font-weight: 400; }
+  .intro-text p { font-size: 16px; font-weight: 300; color: var(--muted); line-height: 1.85; }
+
+  /* Location cards */
+  .locations-list { display: flex; flex-direction: column; gap: 2px; background: var(--border); }
+
+  .location-card {
+    background: var(--cream);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 420px;
+    transition: background 0.2s;
+  }
+  .location-card:nth-child(even) { direction: rtl; }
+  .location-card:nth-child(even) > * { direction: ltr; }
+
+  .loc-img {
+    overflow: hidden;
+    position: relative;
+  }
+  .loc-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.65s ease;
+  }
+  .location-card:hover .loc-img img { transform: scale(1.04); }
+
+  .loc-status {
+    position: absolute;
+    top: 20px; left: 20px;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+  }
+  .loc-status.open { background: #1a5c2a; color: var(--white); }
+  .loc-status.soon { background: var(--gold); color: var(--white); }
+
+  .loc-info {
+    padding: 56px 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .loc-city {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .loc-name {
+    font-family: var(--serif);
+    font-size: clamp(26px, 2.8vw, 40px);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .loc-name em { font-style: italic; font-weight: 400; }
+  .loc-address {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .loc-address .material-symbols-outlined { font-size: 16px; color: var(--gold); }
+  .loc-desc {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: 36px;
+    max-width: 460px;
+  }
+
+  .loc-highlights {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .highlight {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .highlight .val {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .highlight .key {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .loc-actions { display: flex; gap: 16px; align-items: center; }
+  .btn-primary {
+    background: var(--navy); color: var(--white); border: none;
+    padding: 14px 28px; font-family: var(--sans); font-size: 10px;
+    font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; position: relative; overflow: hidden; transition: box-shadow 0.3s;
+  }
+  .btn-primary::after { content: ''; position: absolute; inset: 0; background: var(--gold); transform: translateX(-101%); transition: transform 0.38s cubic-bezier(0.77,0,0.175,1); }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-ghost {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600; color: var(--gold);
+    text-decoration: none; transition: gap 0.25s; background: none; border: none; cursor: pointer;
+  }
+  .btn-ghost:hover { gap: 14px; }
+  .btn-ghost .material-symbols-outlined { font-size: 16px; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--navy-deep); color: var(--white); padding: 96px 40px 0; }
+  .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.4fr; gap: 60px; padding-bottom: 64px; }
+  .footer-brand a { font-family: var(--serif); font-size: 22px; color: var(--gold-lt); text-decoration: none; display: inline-block; margin-bottom: 20px; }
+  .footer-brand p { font-size: 13px; font-weight: 300; line-height: 1.85; color: rgba(250,249,246,0.5); margin-bottom: 24px; }
+  .footer-socials { display: flex; gap: 16px; }
+  .footer-socials a { color: rgba(250,249,246,0.5); transition: color 0.2s; line-height: 0; }
+  .footer-socials a:hover { color: var(--gold-lt); }
+  .footer-socials .material-symbols-outlined { font-size: 20px; }
+  .footer-col h4 { font-family: var(--serif); font-size: 16px; font-weight: 700; margin-bottom: 24px; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 14px; }
+  .footer-col ul a { font-size: 13px; font-weight: 300; color: rgba(250,249,246,0.5); text-decoration: none; transition: color 0.2s, padding-left 0.2s; display: inline-block; }
+  .footer-col ul a:hover { color: var(--gold-lt); padding-left: 4px; }
+  .footer-newsletter h4 { font-family: var(--serif); font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .footer-newsletter p { font-size: 13px; font-weight: 300; color: rgba(250,249,246,0.5); margin-bottom: 20px; line-height: 1.7; }
+  .newsletter-form { display: flex; flex-direction: column; gap: 10px; }
+  .newsletter-form input { background: transparent; border: 1px solid rgba(250,249,246,0.15); padding: 13px 16px; font-family: var(--sans); font-size: 13px; color: var(--white); outline: none; transition: border-color 0.25s; }
+  .newsletter-form input::placeholder { color: rgba(250,249,246,0.25); }
+  .newsletter-form input:focus { border-color: var(--gold-lt); }
+  .newsletter-form button { background: var(--gold-lt); color: var(--navy); border: none; padding: 13px; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.25s; }
+  .newsletter-form button:hover { background: var(--gold); color: var(--white); }
+  .footer-bottom { max-width: 1280px; margin: 0 auto; padding: 24px 0; border-top: 1px solid rgba(250,249,246,0.08); text-align: center; }
+  .footer-bottom p { font-size: 10px; font-weight: 300; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(250,249,246,0.3); }
+
+  .fab { position: fixed; bottom: 32px; right: 32px; width: 58px; height: 58px; background: var(--gold-lt); color: var(--navy); border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 40; box-shadow: 0 8px 28px rgba(160,120,48,0.38); transition: transform 0.25s, box-shadow 0.25s; }
+  .fab:hover { transform: scale(1.08); }
+  .fab .material-symbols-outlined { font-size: 24px; font-variation-settings: 'FILL' 1, 'wght' 400; }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 1024px) {
+    .location-card { grid-template-columns: 1fr; min-height: auto; }
+    .location-card:nth-child(even) { direction: ltr; }
+    .loc-img { min-height: 300px; }
+    .loc-info { padding: 40px 36px; }
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 48px; }
+  }
+  @media (max-width: 768px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .nav-inner { padding: 0 20px; }
+    .locations-wrap { padding: 64px 20px 80px; }
+    .page-hero-inner { padding: 48px 20px; }
+    .loc-info { padding: 32px 24px; }
+    footer { padding: 64px 20px 0; }
+    .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar" aria-hidden="true">
+  <div class="sidebar-header">
+    <a href="index.html" class="sidebar-logo">Owerri Grandeur</a>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <ul class="sidebar-links">
+    <li><a href="index.html">Home <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="rooms.html">Rooms <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="locations.html" class="active">Locations <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="contact.html">Contact <span class="material-symbols-outlined">arrow_forward</span></a></li>
+  </ul>
+  <div class="sidebar-footer"><button class="sidebar-cta">Book Now</button></div>
+</aside>
+
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Owerri Grandeur</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="rooms.html">Rooms</a></li>
+      <li><a href="locations.html" class="active">Locations</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-cta"><span>Book Now</span></button>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <p class="page-eyebrow">Our Properties</p>
+    <h1>Our <em>Locations</em></h1>
+  </div>
+</div>
+
+<div class="locations-wrap">
+  <div class="intro-text reveal">
+    <div class="eyebrow"><div class="line"></div><span>Where We Are</span></div>
+    <h2>Three Cities.<br/><em>One Standard.</em></h2>
+    <p>From the red-earthed heart of Owerri to the power corridors of Abuja and the commercial energy of Lagos, each Owerri Grandeur property carries the same Igbo spirit of excellence — expressed differently in every city.</p>
+  </div>
+
+  <div class="locations-list">
+
+    <!-- Owerri Flagship -->
+    <div class="location-card reveal">
+      <div class="loc-img">
+        <span class="loc-status open">Open Now</span>
+        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80&fit=crop" alt="Owerri Grandeur flagship property"/>
+      </div>
+      <div class="loc-info">
+        <p class="loc-city">Owerri, Imo State</p>
+        <h2 class="loc-name">Owerri <em>Flagship</em></h2>
+        <p class="loc-address"><span class="material-symbols-outlined">location_on</span> 12 Wetheral Road, New Owerri, Imo State</p>
+        <p class="loc-desc">Our original address and still our finest. Situated on Wetheral Road in the heart of New Owerri, this is where the Owerri Grandeur story began. The Heartland capital's most iconic hotel — reimagined for the discerning modern traveller, without losing one thread of its Igbo soul.</p>
+        <div class="loc-highlights">
+          <div class="highlight"><span class="val">120</span><span class="key">Rooms</span></div>
+          <div class="highlight"><span class="val">Est. 1984</span><span class="key">Founded</span></div>
+          <div class="highlight"><span class="val">5★</span><span class="key">Rating</span></div>
+        </div>
+        <div class="loc-actions">
+          <button class="btn-primary"><span>Book a Room</span></button>
+          <button class="btn-ghost">Get Directions <span class="material-symbols-outlined">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lagos -->
+    <div class="location-card reveal">
+      <div class="loc-img">
+        <span class="loc-status open">Open Now</span>
+        <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200&q=80&fit=crop" alt="Owerri Grandeur Lagos"/>
+      </div>
+      <div class="loc-info">
+        <p class="loc-city">Lagos, Nigeria</p>
+        <h2 class="loc-name">Victoria Island <em>Lagos</em></h2>
+        <p class="loc-address"><span class="material-symbols-outlined">location_on</span> 14 Adeola Odeku Street, Victoria Island, Lagos</p>
+        <p class="loc-desc">Where South-East pedigree meets Lagos energy. Our Victoria Island property carries all the refinement of the Owerri Grandeur name into Nigeria's commercial capital — for those who need the city but refuse to compromise on quality.</p>
+        <div class="loc-highlights">
+          <div class="highlight"><span class="val">98</span><span class="key">Rooms</span></div>
+          <div class="highlight"><span class="val">Est. 2003</span><span class="key">Founded</span></div>
+          <div class="highlight"><span class="val">5★</span><span class="key">Rating</span></div>
+        </div>
+        <div class="loc-actions">
+          <button class="btn-primary"><span>Book a Room</span></button>
+          <button class="btn-ghost">Get Directions <span class="material-symbols-outlined">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Abuja — Coming Soon -->
+    <div class="location-card reveal">
+      <div class="loc-img">
+        <span class="loc-status soon">Opening 2025</span>
+        <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1200&q=80&fit=crop" alt="Owerri Grandeur Abuja"/>
+      </div>
+      <div class="loc-info">
+        <p class="loc-city">Abuja, FCT</p>
+        <h2 class="loc-name">Maitama <em>Estate</em></h2>
+        <p class="loc-address"><span class="material-symbols-outlined">location_on</span> 7 Gana Street, Maitama, Abuja FCT</p>
+        <p class="loc-desc">The Heartland arrives in the capital. Our Maitama address will bring the warmth and cultural richness of Imo State hospitality to Abuja — where power brokers and diplomats will find that South-East refinement is in a class of its own.</p>
+        <div class="loc-highlights">
+          <div class="highlight"><span class="val">84</span><span class="key">Rooms</span></div>
+          <div class="highlight"><span class="val">2025</span><span class="key">Opening</span></div>
+          <div class="highlight"><span class="val">5★</span><span class="key">Expected</span></div>
+        </div>
+        <div class="loc-actions">
+          <button class="btn-primary" style="background:var(--muted); cursor:not-allowed;"><span>Coming Soon</span></button>
+          <button class="btn-ghost">Register Interest <span class="material-symbols-outlined">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html">Owerri Grandeur</a>
+      <p>Setting the standard for heritage luxury in South-East Nigeria since 1984.</p>
+      <div class="footer-socials">
+        <a href="#" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="#" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="#" aria-label="Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://wa.me/2348370000000" aria-label="WhatsApp">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Explore</h4><ul>
+      <li><a href="rooms.html">Rooms &amp; Suites</a></li>
+      <li><a href="dining.html">Dining Experiences</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Service</h4><ul>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="terms.html">Terms &amp; Conditions</a></li>
+      <li><a href="cookies.html">Cookie Policy</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+    </ul></div>
+    <div class="footer-newsletter">
+      <h4>Join The Circle</h4>
+      <p>Receive exclusive invitations and estate updates.</p>
+      <div class="newsletter-form">
+        <input type="email" placeholder="Email Address"/>
+        <button type="button">Subscribe</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 Owerri Grandeur. All Rights Reserved. Crafted for Distinction.</p></div>
+</footer>
+
+<button class="fab" aria-label="Concierge support">
+  <span class="material-symbols-outlined">support_agent</span>
+</button>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const closeBtn = document.getElementById('sidebarClose');
+  function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('visible'); hamburger.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('visible'); hamburger.classList.remove('open'); document.body.style.overflow = ''; }
+  hamburger.addEventListener('click', openSidebar);
+  closeBtn.addEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 3) * 0.1 + 's';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rooms & Suites | Owerri Grandeur</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Albert+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@300,0&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy:      #00113a;
+    --navy-deep: #000d2b;
+    --gold:      #a07830;
+    --gold-lt:   #e9c176;
+    --cream:     #faf9f6;
+    --paper:     #f2ede4;
+    --surface:   #efeeeb;
+    --ink:       #1a1c1a;
+    --muted:     #6b6760;
+    --border:    #d4d0c8;
+    --white:     #ffffff;
+    --serif: 'Libre Baskerville', Georgia, serif;
+    --sans:  'Albert Sans', sans-serif;
+    --shadow-sm: 0 4px 16px rgba(0,17,58,0.06);
+    --shadow-md: 0 12px 40px rgba(0,17,58,0.09);
+    --shadow-lg: 0 24px 64px rgba(0,17,58,0.12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--ink); font-family: var(--sans); line-height: 1.7; overflow-x: hidden; }
+  img { display: block; max-width: 100%; }
+
+  /* ── NAV ── */
+  nav.topnav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(250,249,246,0.88); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(0,17,58,0.06); box-shadow: var(--shadow-sm); }
+  .nav-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; padding: 0 40px; height: 76px; }
+  .nav-logo { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--navy); text-decoration: none; letter-spacing: -0.01em; }
+  .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+  .nav-links a { font-family: var(--serif); font-size: 15px; color: var(--navy); text-decoration: none; opacity: 0.75; transition: opacity 0.2s, color 0.2s; position: relative; }
+  .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 2px; background: var(--gold); transition: width 0.3s ease; }
+  .nav-links a:hover { opacity: 1; }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-links a.active { opacity: 1; color: var(--gold); font-weight: 700; }
+  .nav-links a.active::after { width: 100%; }
+  .nav-cta { background: var(--navy); color: var(--white); padding: 12px 28px; font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; position: relative; overflow: hidden; transition: box-shadow 0.3s; }
+  .nav-cta::after { content: ''; position: absolute; inset: 0; background: var(--gold); transform: translateX(-101%); transition: transform 0.38s cubic-bezier(0.77,0,0.175,1); }
+  .nav-cta:hover { box-shadow: 0 4px 20px rgba(0,17,58,0.25); }
+  .nav-cta:hover::after { transform: translateX(0); }
+  .nav-cta span { position: relative; z-index: 1; }
+  .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 36px; height: 36px; background: none; border: none; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--navy); border-radius: 2px; transition: transform 0.35s cubic-bezier(0.77,0,0.175,1), opacity 0.25s, width 0.3s; transform-origin: center; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── SIDEBAR ── */
+  .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,17,58,0.45); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.35s; backdrop-filter: blur(2px); }
+  .sidebar-overlay.visible { opacity: 1; pointer-events: all; }
+  .sidebar { position: fixed; top: 0; right: 0; width: min(320px,85vw); height: 100dvh; background: var(--cream); z-index: 100; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.77,0,0.175,1); display: flex; flex-direction: column; box-shadow: -8px 0 40px rgba(0,17,58,0.15); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 28px; border-bottom: 1px solid var(--border); }
+  .sidebar-logo { font-family: var(--serif); font-size: 16px; font-weight: 700; color: var(--navy); text-decoration: none; }
+  .sidebar-close { background: none; border: none; cursor: pointer; color: var(--navy); line-height: 0; padding: 4px; opacity: 0.6; transition: opacity 0.2s; }
+  .sidebar-close:hover { opacity: 1; }
+  .sidebar-close .material-symbols-outlined { font-size: 22px; }
+  .sidebar-links { list-style: none; padding: 32px 28px; flex: 1; }
+  .sidebar-links li { border-bottom: 1px solid var(--border); }
+  .sidebar-links a { display: flex; justify-content: space-between; align-items: center; font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--navy); text-decoration: none; padding: 20px 0; opacity: 0.75; transition: opacity 0.2s, color 0.2s, padding-left 0.25s; }
+  .sidebar-links a .material-symbols-outlined { font-size: 16px; opacity: 0.3; transition: opacity 0.2s, transform 0.25s; }
+  .sidebar-links a:hover { opacity: 1; color: var(--gold); padding-left: 6px; }
+  .sidebar-links a:hover .material-symbols-outlined { opacity: 1; transform: translateX(4px); }
+  .sidebar-links a.active { opacity: 1; color: var(--gold); }
+  .sidebar-footer { padding: 28px; border-top: 1px solid var(--border); }
+  .sidebar-cta { width: 100%; background: var(--navy); color: var(--white); border: none; padding: 18px; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background 0.25s; }
+  .sidebar-cta:hover { background: var(--gold); }
+
+  /* ── PAGE HERO ── */
+  .page-hero {
+    padding-top: 76px;
+    background: var(--navy);
+    min-height: 380px;
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1600&q=80&fit=crop') center/cover no-repeat;
+    opacity: 0.18;
+  }
+  .page-hero-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 64px 40px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+  .page-eyebrow {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--gold-lt);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .page-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold-lt); opacity: 0.5; }
+  .page-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .page-hero h1 em { font-style: italic; font-weight: 400; color: var(--gold-lt); }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 76px;
+    z-index: 40;
+  }
+  .filter-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+  }
+  .filter-btn {
+    background: none;
+    border: none;
+    padding: 18px 24px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .filter-btn:hover { color: var(--navy); }
+  .filter-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ── ROOMS GRID ── */
+  .rooms-section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 80px 40px 120px;
+  }
+
+  .rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+  }
+
+  /* Featured room spans full width */
+  .room-card.featured {
+    grid-column: span 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 480px;
+  }
+
+  .room-card {
+    background: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .room-img {
+    overflow: hidden;
+    position: relative;
+  }
+  .room-card.featured .room-img { min-height: 480px; }
+  .room-card:not(.featured) .room-img { height: 260px; }
+
+  .room-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.65s ease;
+  }
+  .room-card:hover .room-img img { transform: scale(1.05); }
+
+  .room-badge {
+    position: absolute;
+    top: 20px; left: 20px;
+    background: var(--gold);
+    color: var(--white);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    z-index: 1;
+  }
+
+  .room-info {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    background: var(--cream);
+  }
+  .room-card.featured .room-info { padding: 56px 52px; justify-content: center; }
+
+  .room-type {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .room-name {
+    font-family: var(--serif);
+    font-size: clamp(22px, 2.5vw, 34px);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .room-name em { font-style: italic; font-weight: 400; }
+  .room-desc {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .room-specs {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .spec {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .spec .material-symbols-outlined { font-size: 16px; color: var(--gold); }
+
+  .room-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    margin-top: auto;
+  }
+  .room-price .amount {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--navy);
+    display: block;
+    line-height: 1;
+  }
+  .room-price .per {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-top: 2px;
+    display: block;
+  }
+  .book-btn {
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    padding: 13px 28px;
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+  }
+  .book-btn::after { content: ''; position: absolute; inset: 0; background: var(--gold); transform: translateX(-101%); transition: transform 0.38s cubic-bezier(0.77,0,0.175,1); }
+  .book-btn:hover::after { transform: translateX(0); }
+  .book-btn span { position: relative; z-index: 1; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--navy-deep); color: var(--white); padding: 96px 40px 0; }
+  .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.4fr; gap: 60px; padding-bottom: 64px; }
+  .footer-brand a { font-family: var(--serif); font-size: 22px; color: var(--gold-lt); text-decoration: none; display: inline-block; margin-bottom: 20px; }
+  .footer-brand p { font-size: 13px; font-weight: 300; line-height: 1.85; color: rgba(250,249,246,0.5); margin-bottom: 24px; }
+  .footer-socials { display: flex; gap: 16px; }
+  .footer-socials a { color: rgba(250,249,246,0.5); transition: color 0.2s; line-height: 0; }
+  .footer-socials a:hover { color: var(--gold-lt); }
+  .footer-socials .material-symbols-outlined { font-size: 20px; }
+  .footer-col h4 { font-family: var(--serif); font-size: 16px; font-weight: 700; margin-bottom: 24px; }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 14px; }
+  .footer-col ul a { font-size: 13px; font-weight: 300; color: rgba(250,249,246,0.5); text-decoration: none; transition: color 0.2s, padding-left 0.2s; display: inline-block; }
+  .footer-col ul a:hover { color: var(--gold-lt); padding-left: 4px; }
+  .footer-newsletter h4 { font-family: var(--serif); font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .footer-newsletter p { font-size: 13px; font-weight: 300; color: rgba(250,249,246,0.5); margin-bottom: 20px; line-height: 1.7; }
+  .newsletter-form { display: flex; flex-direction: column; gap: 10px; }
+  .newsletter-form input { background: transparent; border: 1px solid rgba(250,249,246,0.15); padding: 13px 16px; font-family: var(--sans); font-size: 13px; color: var(--white); outline: none; transition: border-color 0.25s; }
+  .newsletter-form input::placeholder { color: rgba(250,249,246,0.25); }
+  .newsletter-form input:focus { border-color: var(--gold-lt); }
+  .newsletter-form button { background: var(--gold-lt); color: var(--navy); border: none; padding: 13px; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.25s; }
+  .newsletter-form button:hover { background: var(--gold); color: var(--white); }
+  .footer-bottom { max-width: 1280px; margin: 0 auto; padding: 24px 0; border-top: 1px solid rgba(250,249,246,0.08); text-align: center; }
+  .footer-bottom p { font-size: 10px; font-weight: 300; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(250,249,246,0.3); }
+
+  /* ── FAB ── */
+  .fab { position: fixed; bottom: 32px; right: 32px; width: 58px; height: 58px; background: var(--gold-lt); color: var(--navy); border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 40; box-shadow: 0 8px 28px rgba(160,120,48,0.38); transition: transform 0.25s, box-shadow 0.25s; }
+  .fab:hover { transform: scale(1.08); box-shadow: 0 14px 36px rgba(160,120,48,0.48); }
+  .fab .material-symbols-outlined { font-size: 24px; font-variation-settings: 'FILL' 1, 'wght' 400; }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .rooms-grid { grid-template-columns: 1fr 1fr; }
+    .room-card.featured { grid-column: span 2; grid-template-columns: 1fr; }
+    .room-card.featured .room-img { min-height: 360px; }
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 48px; }
+  }
+  @media (max-width: 768px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .nav-inner { padding: 0 20px; }
+    .rooms-grid { grid-template-columns: 1fr; background: none; gap: 24px; }
+    .room-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+    .room-card.featured .room-img { min-height: 260px; }
+    .room-card.featured .room-info { padding: 32px; }
+    .rooms-section { padding: 48px 20px 80px; }
+    .filter-inner { padding: 0 20px; }
+    .page-hero-inner { padding: 48px 20px; }
+    footer { padding: 64px 20px 0; }
+    .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  /* ── LOADING SCREEN ── */
+  .page-loader {
+    position: fixed;
+    inset: 0;
+    background: var(--navy);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  .page-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .loader-logo {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.04em;
+  }
+  .loader-logo span { color: var(--gold-lt); }
+  .loader-bar {
+    width: 160px;
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .loader-bar::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: var(--gold-lt);
+    animation: loaderSlide 1.2s ease forwards;
+  }
+  @keyframes loaderSlide {
+    0%   { left: -100%; }
+    100% { left: 100%; }
+  }
+  .loader-tagline {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    font-family: var(--sans);
+  }
+
+
+  /* ── CHATBOT ── */
+  .chat-widget { position: fixed; bottom: 104px; right: 32px; width: 360px; background: var(--white); border: 1px solid var(--border); box-shadow: 0 24px 64px rgba(0,17,58,0.18); display: flex; flex-direction: column; z-index: 45; opacity: 0; transform: translateY(16px) scale(0.97); pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; }
+  .chat-widget.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
+  .chat-header { background: var(--navy); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+  .chat-header-info { display: flex; align-items: center; gap: 12px; }
+  .chat-avatar { width: 36px; height: 36px; background: var(--gold); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .chat-name { font-size: 13px; font-weight: 600; color: var(--white); }
+  .chat-status { font-size: 10px; color: var(--gold-lt); margin-top: 2px; }
+  .chat-close { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.6); line-height: 0; padding: 4px; transition: color 0.2s; }
+  .chat-close:hover { color: var(--white); }
+  .chat-close .material-symbols-outlined { font-size: 18px; }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; min-height: 200px; max-height: 240px; }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .msg { max-width: 85%; padding: 10px 14px; font-size: 13px; line-height: 1.55; font-weight: 300; }
+  .msg-bot { background: var(--surface); color: var(--ink); align-self: flex-start; border-radius: 0 12px 12px 12px; }
+  .msg-user { background: var(--navy); color: var(--white); align-self: flex-end; border-radius: 12px 12px 0 12px; }
+  .msg-typing { background: var(--surface); align-self: flex-start; border-radius: 0 12px 12px 12px; padding: 12px 16px; }
+  .typing-dots { display: flex; gap: 4px; }
+  .typing-dots span { width: 6px; height: 6px; background: var(--muted); border-radius: 50%; animation: typingBounce 1.2s infinite; }
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+  .chat-suggestions { padding: 8px 16px 12px; display: flex; flex-wrap: wrap; gap: 6px; border-top: 1px solid var(--border); flex-shrink: 0; }
+  .chat-suggestions button { background: none; border: 1px solid var(--border); padding: 5px 12px; font-family: var(--sans); font-size: 10px; font-weight: 500; color: var(--muted); cursor: pointer; border-radius: 20px; transition: all 0.2s; white-space: nowrap; }
+  .chat-suggestions button:hover { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .chat-input-wrap { display: flex; align-items: center; border-top: 1px solid var(--border); padding: 10px 12px; gap: 8px; flex-shrink: 0; }
+  .chat-input { flex: 1; border: none; outline: none; font-family: var(--sans); font-size: 13px; color: var(--navy); background: transparent; padding: 6px 0; }
+  .chat-input::placeholder { color: rgba(26,24,16,0.3); }
+  .chat-send { background: var(--gold); color: var(--white); border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; line-height: 0; flex-shrink: 0; }
+  .chat-send:hover { background: var(--navy); }
+  .chat-send .material-symbols-outlined { font-size: 16px; }
+  .fab.has-notification::after { content: ''; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; background: #e53e3e; border-radius: 50%; border: 2px solid var(--white); }
+  @media (max-width: 480px) { .chat-widget { right: 12px; left: 12px; width: auto; bottom: 96px; } }
+
+</style>
+</head>
+<body>
+<!-- Loading Screen -->
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo">Owerri <span>Grandeur</span></div>
+  <div class="loader-bar"></div>
+  <div class="loader-tagline">The Heartland Estate</div>
+</div>
+
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar" aria-hidden="true">
+  <div class="sidebar-header">
+    <a href="index.html" class="sidebar-logo">Owerri Grandeur</a>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <ul class="sidebar-links">
+    <li><a href="index.html">Home <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="rooms.html" class="active">Rooms <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="locations.html">Locations <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="contact.html">Contact <span class="material-symbols-outlined">arrow_forward</span></a></li>
+  </ul>
+  <div class="sidebar-footer">
+    <button class="sidebar-cta">Book Now</button>
+  </div>
+</aside>
+
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Owerri Grandeur</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="rooms.html" class="active">Rooms</a></li>
+      <li><a href="locations.html">Locations</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-cta"><span>Book Now</span></button>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <p class="page-eyebrow">Accommodation</p>
+    <h1>Rooms &amp; <em>Suites</em></h1>
+  </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <button class="filter-btn active" onclick="filterRooms('all', this)">All Rooms</button>
+    <button class="filter-btn" onclick="filterRooms('suite', this)">Suites</button>
+    <button class="filter-btn" onclick="filterRooms('deluxe', this)">Deluxe</button>
+    <button class="filter-btn" onclick="filterRooms('standard', this)">Standard</button>
+  </div>
+</div>
+
+<!-- Rooms -->
+<section class="rooms-section">
+  <div class="rooms-grid" id="roomsGrid">
+
+    <!-- Featured: Executive Suite -->
+    <div class="room-card featured reveal" data-category="suite">
+      <div class="room-img">
+        <div class="room-badge">Most Popular</div>
+        <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200&q=80&fit=crop" alt="Executive Suite"/>
+      </div>
+      <div class="room-info">
+        <p class="room-type">Signature Suite</p>
+        <h2 class="room-name">The Executive <em>Suite</em></h2>
+        <p class="room-desc">85 square metres of Owerri skyline views. Hand-carved uli-patterned headboards, Imo State mahogany furnishings and the kind of quiet that only the finest floors in the Heartland afford.</p>
+        <div class="room-specs">
+          <div class="spec"><span class="material-symbols-outlined">straighten</span> 85 sqm</div>
+          <div class="spec"><span class="material-symbols-outlined">king_bed</span> King Bed</div>
+          <div class="spec"><span class="material-symbols-outlined">group</span> Up to 2 guests</div>
+          <div class="spec"><span class="material-symbols-outlined">bathtub</span> Soaking Tub</div>
+          <div class="spec"><span class="material-symbols-outlined">wifi</span> Fibre WiFi</div>
+        </div>
+        <div class="room-footer">
+          <div class="room-price">
+            <span class="amount">₦122,500</span>
+            <span class="per">per night · taxes included</span>
+          </div>
+          <button class="book-btn"><span>Reserve</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Presidential Suite -->
+    <div class="room-card reveal" data-category="suite">
+      <div class="room-img">
+        <div class="room-badge">Exclusive</div>
+        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80&fit=crop" alt="Presidential Suite"/>
+      </div>
+      <div class="room-info">
+        <p class="room-type">Presidential Suite</p>
+        <h2 class="room-name">The <em>Presidential</em></h2>
+        <p class="room-desc">Our most coveted address in the Heartland. A full floor of private luxury with butler service and a terrace that frames Owerri at its most magnificent.</p>
+        <div class="room-specs">
+          <div class="spec"><span class="material-symbols-outlined">straighten</span> 140 sqm</div>
+          <div class="spec"><span class="material-symbols-outlined">king_bed</span> King + Living</div>
+        </div>
+        <div class="room-footer">
+          <div class="room-price">
+            <span class="amount">₦280,000</span>
+            <span class="per">per night</span>
+          </div>
+          <button class="book-btn"><span>Reserve</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deluxe Room -->
+    <div class="room-card reveal" data-category="deluxe">
+      <div class="room-img">
+        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80&fit=crop" alt="Deluxe Room"/>
+      </div>
+      <div class="room-info">
+        <p class="room-type">Deluxe Room</p>
+        <h2 class="room-name">Heartland <em>Deluxe</em></h2>
+        <p class="room-desc">Owerri city views, refined finishes and every comfort you need — without compromise. A classic Owerri Grandeur experience that the Heartland deserves.</p>
+        <div class="room-specs">
+          <div class="spec"><span class="material-symbols-outlined">straighten</span> 45 sqm</div>
+          <div class="spec"><span class="material-symbols-outlined">king_bed</span> King Bed</div>
+        </div>
+        <div class="room-footer">
+          <div class="room-price">
+            <span class="amount">₦75,000</span>
+            <span class="per">per night</span>
+          </div>
+          <button class="book-btn"><span>Reserve</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Standard Twin -->
+    <div class="room-card reveal" data-category="standard">
+      <div class="room-img">
+        <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&q=80&fit=crop" alt="Standard Twin Room"/>
+      </div>
+      <div class="room-info">
+        <p class="room-type">Standard Room</p>
+        <h2 class="room-name">Garden <em>Twin</em></h2>
+        <p class="room-desc">Two queen beds, lush garden views and the same impeccable attention to detail that defines every room in the Owerri Grandeur estate.</p>
+        <div class="room-specs">
+          <div class="spec"><span class="material-symbols-outlined">straighten</span> 38 sqm</div>
+          <div class="spec"><span class="material-symbols-outlined">bed</span> Twin Queens</div>
+        </div>
+        <div class="room-footer">
+          <div class="room-price">
+            <span class="amount">₦52,000</span>
+            <span class="per">per night</span>
+          </div>
+          <button class="book-btn"><span>Reserve</span></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html">Owerri Grandeur</a>
+      <p>Setting the standard for heritage luxury in South-East Nigeria since 1984.</p>
+      <div class="footer-socials">
+        <a href="#" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="#" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="#" aria-label="Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://wa.me/2348370000000" aria-label="WhatsApp">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="rooms.html">Rooms &amp; Suites</a></li>
+        <li><a href="dining.html">Dining Experiences</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Service</h4>
+      <ul>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+        <li><a href="cookies.html">Cookie Policy</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-newsletter">
+      <h4>Join The Circle</h4>
+      <p>Receive exclusive invitations and estate updates.</p>
+      <div class="newsletter-form">
+        <input type="email" placeholder="Email Address"/>
+        <button type="button">Subscribe</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 Owerri Grandeur. All Rights Reserved. Crafted for Distinction.</p>
+  </div>
+</footer>
+
+<!-- FAB -->
+<button class="fab" id="chatToggle" aria-label="Open concierge chat">
+  <span class="material-symbols-outlined" id="chatIcon">support_agent</span>
+</button>
+
+<!-- Chatbot Widget -->
+<div class="chat-widget" id="chatWidget" aria-hidden="true">
+  <div class="chat-header">
+    <div class="chat-header-info">
+      <div class="chat-avatar">OG</div>
+      <div>
+        <div class="chat-name">Owerri Grandeur Concierge</div>
+        <div class="chat-status">&#9679; Online now</div>
+      </div>
+    </div>
+    <button class="chat-close" id="chatClose" aria-label="Close chat">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-suggestions" id="chatSuggestions">
+    <button onclick="sendSuggestion(this)">Room availability</button>
+    <button onclick="sendSuggestion(this)">Check-in times</button>
+    <button onclick="sendSuggestion(this)">Dining options</button>
+    <button onclick="sendSuggestion(this)">Location &amp; directions</button>
+    <button onclick="sendSuggestion(this)">Pricing</button>
+    <button onclick="sendSuggestion(this)">Cancellation policy</button>
+  </div>
+  <div class="chat-input-wrap">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Ask us anything&#8230;" autocomplete="off"/>
+    <button class="chat-send" id="chatSend" aria-label="Send">
+      <span class="material-symbols-outlined">send</span>
+    </button>
+  </div>
+</div>
+
+
+<script>
+  // Sidebar
+  const hamburger = document.getElementById('hamburger');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const closeBtn = document.getElementById('sidebarClose');
+  function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('visible'); hamburger.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('visible'); hamburger.classList.remove('open'); document.body.style.overflow = ''; }
+  hamburger.addEventListener('click', openSidebar);
+  closeBtn.addEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+  // Filter
+  function filterRooms(category, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.room-card').forEach(card => {
+      const match = category === 'all' || card.dataset.category === category;
+      card.style.display = match ? '' : 'none';
+    });
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 4) * 0.08 + 's';
+    observer.observe(el);
+  });
+
+  /* ── LOADING SCREEN ── */
+  window.addEventListener('load', function() {
+    var loader = document.getElementById('pageLoader');
+    if (loader) {
+      setTimeout(function() { loader.classList.add('hidden'); }, 1000);
+    }
+  });
+
+  /* ── CHATBOT ── */
+  var chatWidget   = document.getElementById('chatWidget');
+  var chatToggle   = document.getElementById('chatToggle');
+  var chatClose    = document.getElementById('chatClose');
+  var chatInput    = document.getElementById('chatInput');
+  var chatSend     = document.getElementById('chatSend');
+  var chatMessages = document.getElementById('chatMessages');
+  var chatIcon     = document.getElementById('chatIcon');
+  var chatOpen     = false;
+
+  var responses = [
+    { keywords: ['room', 'suite', 'available', 'availability', 'book', 'reserve'],
+      answer: 'We have four room types &#8212; <strong>Executive Suite</strong> (&#8358;122,500/night), <strong>Presidential Suite</strong> (&#8358;280,000/night), <strong>Heartland Deluxe</strong> (&#8358;75,000/night) and <strong>Garden Twin</strong> (&#8358;52,000/night). See all on our <a href="rooms.html" style="color:var(--gold)">Rooms page</a>.' },
+    { keywords: ['check-in', 'checkin', 'check in', 'arrive', 'arrival'],
+      answer: 'Standard check-in is from <strong>2:00 PM</strong>. Early check-in may be available on request &#8212; just let us know your arrival time when booking.' },
+    { keywords: ['check-out', 'checkout', 'check out', 'leave', 'departure'],
+      answer: 'Standard check-out is at <strong>12:00 PM (noon)</strong>. Late check-out can be arranged subject to availability &#8212; speak to our front desk the evening before.' },
+    { keywords: ['dining', 'restaurant', 'food', 'eat', 'breakfast', 'lunch', 'dinner', 'menu'],
+      answer: 'We have five dining spots: <strong>Imo Table</strong>, <strong>The Verandah</strong>, <strong>Oguta Grill</strong>, <strong>Mama&#x27;s Kitchen</strong> and <strong>The 1984 Bar</strong>. See our <a href="dining.html" style="color:var(--gold)">Dining page</a>.' },
+    { keywords: ['location', 'address', 'where', 'directions', 'find', 'owerri', 'wetheral'],
+      answer: 'We are at <strong>12 Wetheral Road, New Owerri, Imo State</strong>. Complimentary airport transfers available from Sam Mbakwe Airport.' },
+    { keywords: ['price', 'pricing', 'cost', 'rate', 'how much', 'naira'],
+      answer: 'Rates start from <strong>&#8358;52,000/night</strong> (Garden Twin) up to <strong>&#8358;280,000/night</strong> (Presidential Suite). All rates include VAT and breakfast.' },
+    { keywords: ['cancel', 'cancellation', 'refund', 'change', 'modify'],
+      answer: 'Free cancellation up to <strong>48 hours before check-in</strong>. Within 48 hours, a one-night charge applies. See our <a href="terms.html" style="color:var(--gold)">Terms &amp; Conditions</a>.' },
+    { keywords: ['pool', 'swim', 'swimming'],
+      answer: 'Our <strong>Skyline Infinity Pool</strong> is open daily <strong>7:00 AM &#8211; 9:00 PM</strong>, exclusively for hotel guests.' },
+    { keywords: ['spa', 'wellness', 'massage', 'treatment'],
+      answer: 'Our <strong>Wellness Sanctuary</strong> offers Igbo-inspired therapies and modern treatments. Advance booking recommended &#8212; call +234 (0) 83 700 0000.' },
+    { keywords: ['wifi', 'internet', 'fibre'],
+      answer: 'Complimentary <strong>high-speed fibre WiFi</strong> in all rooms and public areas &#8212; no password needed.' },
+    { keywords: ['airport', 'transfer', 'pickup', 'transport'],
+      answer: 'We offer <strong>complimentary airport transfers</strong> from Sam Mbakwe International Airport. Include your flight details when booking.' },
+    { keywords: ['event', 'wedding', 'conference', 'meeting', 'banquet'],
+      answer: 'We host weddings, corporate events and private functions. Email <strong>hello@owerrigrandeur.com</strong> for a custom quote.' },
+    { keywords: ['pet', 'dog', 'cat'],
+      answer: 'Unfortunately pets are not permitted at Owerri Grandeur.' },
+    { keywords: ['payment', 'pay', 'card', 'cash', 'transfer'],
+      answer: 'We accept <strong>Visa, Mastercard, bank transfer and cash (&#8358;)</strong>.' },
+    { keywords: ['hello', 'hi', 'hey', 'good morning', 'good evening', 'good afternoon'],
+      answer: 'Welcome to Owerri Grandeur! I&#x27;m your virtual concierge. Ask me anything about rooms, dining, check-in or your stay. &#128522;' },
+    { keywords: ['thank', 'thanks', 'appreciate'],
+      answer: 'It&#x27;s our pleasure! Is there anything else I can help you with? &#128522;' }
+  ];
+
+  function getResponse(input) {
+    var lower = input.toLowerCase();
+    for (var i = 0; i < responses.length; i++) {
+      for (var j = 0; j < responses[i].keywords.length; j++) {
+        if (lower.indexOf(responses[i].keywords[j]) !== -1) return responses[i].answer;
+      }
+    }
+    return 'I&#x27;m not sure about that one! Please call <strong>+234 (0) 83 700 0000</strong> or email <strong>hello@owerrigrandeur.com</strong> and our team will assist you directly.';
+  }
+
+  function addMessage(text, isUser) {
+    var msg = document.createElement('div');
+    msg.className = 'msg ' + (isUser ? 'msg-user' : 'msg-bot');
+    msg.innerHTML = text;
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function botReply(input) {
+    var typing = document.createElement('div');
+    typing.className = 'msg-typing';
+    typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+    chatMessages.appendChild(typing);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    setTimeout(function() {
+      chatMessages.removeChild(typing);
+      addMessage(getResponse(input), false);
+    }, 900);
+  }
+
+  function sendMessage() {
+    var text = chatInput.value.trim();
+    if (!text) return;
+    addMessage(text, true);
+    chatInput.value = '';
+    document.getElementById('chatSuggestions').style.display = 'none';
+    botReply(text);
+  }
+
+  function sendSuggestion(btn) {
+    addMessage(btn.textContent, true);
+    document.getElementById('chatSuggestions').style.display = 'none';
+    botReply(btn.textContent);
+  }
+
+  function openChat() {
+    chatOpen = true;
+    chatWidget.classList.add('open');
+    chatIcon.textContent = 'close';
+    chatToggle.classList.remove('has-notification');
+    if (chatMessages.children.length === 0) {
+      setTimeout(function() {
+        addMessage('&#128075; Welcome to Owerri Grandeur! I&#x27;m your virtual concierge. Ask me anything about our rooms, dining, pricing or your stay.', false);
+      }, 300);
+    }
+    setTimeout(function() { chatInput.focus(); }, 400);
+  }
+
+  function closeChat() {
+    chatOpen = false;
+    chatWidget.classList.remove('open');
+    chatIcon.textContent = 'support_agent';
+  }
+
+  chatToggle.addEventListener('click', function() { chatOpen ? closeChat() : openChat(); });
+  chatClose.addEventListener('click', closeChat);
+  chatInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendMessage(); });
+  chatSend.addEventListener('click', sendMessage);
+  setTimeout(function() { if (!chatOpen) chatToggle.classList.add('has-notification'); }, 4000);
+
+</script>
+</body>
+</html>

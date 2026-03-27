@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gallery | Owerri Grandeur</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Albert+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@300,0&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy:      #00113a;
+    --navy-deep: #000d2b;
+    --gold:      #a07830;
+    --gold-lt:   #e9c176;
+    --cream:     #faf9f6;
+    --paper:     #f2ede4;
+    --surface:   #efeeeb;
+    --ink:       #1a1c1a;
+    --muted:     #6b6760;
+    --border:    #d4d0c8;
+    --white:     #ffffff;
+    --serif: 'Libre Baskerville', Georgia, serif;
+    --sans:  'Albert Sans', sans-serif;
+    --shadow-sm: 0 4px 16px rgba(0,17,58,0.06);
+    --shadow-md: 0 12px 40px rgba(0,17,58,0.09);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--white); font-family: var(--sans); line-height: 1.7; overflow-x: hidden; }
+  img { display: block; max-width: 100%; }
+
+  /* ── LOADING SCREEN ── */
+  .page-loader { position: fixed; inset: 0; background: var(--navy); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; transition: opacity 0.5s ease, visibility 0.5s ease; }
+  .page-loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-logo { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--white); letter-spacing: 0.04em; }
+  .loader-logo span { color: var(--gold-lt); }
+  .loader-bar { width: 160px; height: 1px; background: rgba(255,255,255,0.15); position: relative; overflow: hidden; }
+  .loader-bar::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--gold-lt); animation: loaderSlide 1.2s ease forwards; }
+  @keyframes loaderSlide { 0% { left: -100%; } 100% { left: 100%; } }
+  .loader-tagline { font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(255,255,255,0.35); font-family: var(--sans); }
+
+  /* ── NAV ── */
+  nav.topnav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(26,24,16,0.85); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .nav-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1280px; margin: 0 auto; padding: 0 40px; height: 76px; }
+  .nav-logo { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--white); text-decoration: none; letter-spacing: -0.01em; }
+  .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+  .nav-links a { font-family: var(--serif); font-size: 15px; color: var(--white); text-decoration: none; opacity: 0.65; transition: opacity 0.2s; position: relative; }
+  .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 2px; background: var(--gold-lt); transition: width 0.3s; }
+  .nav-links a:hover { opacity: 1; } .nav-links a:hover::after { width: 100%; }
+  .nav-links a.active { opacity: 1; color: var(--gold-lt); font-weight: 700; } .nav-links a.active::after { width: 100%; }
+  .nav-cta { background: var(--gold); color: var(--navy); padding: 12px 28px; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.25s; }
+  .nav-cta:hover { background: var(--gold-lt); }
+  .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 36px; height: 36px; background: none; border: none; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--white); border-radius: 2px; transition: transform 0.35s cubic-bezier(0.77,0,0.175,1), opacity 0.25s, width 0.3s; transform-origin: center; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── SIDEBAR ── */
+  .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.35s; }
+  .sidebar-overlay.visible { opacity: 1; pointer-events: all; }
+  .sidebar { position: fixed; top: 0; right: 0; width: min(320px,85vw); height: 100dvh; background: var(--ink); z-index: 100; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.77,0,0.175,1); display: flex; flex-direction: column; box-shadow: -8px 0 40px rgba(0,0,0,0.4); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-header { display: flex; justify-content: space-between; align-items: center; padding: 24px 28px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .sidebar-logo { font-family: var(--serif); font-size: 16px; font-weight: 700; color: var(--white); text-decoration: none; }
+  .sidebar-close { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.6); line-height: 0; padding: 4px; transition: color 0.2s; }
+  .sidebar-close:hover { color: var(--white); }
+  .sidebar-close .material-symbols-outlined { font-size: 22px; }
+  .sidebar-links { list-style: none; padding: 32px 28px; flex: 1; }
+  .sidebar-links li { border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .sidebar-links a { display: flex; justify-content: space-between; align-items: center; font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--white); text-decoration: none; padding: 20px 0; opacity: 0.65; transition: opacity 0.2s, color 0.2s, padding-left 0.25s; }
+  .sidebar-links a .material-symbols-outlined { font-size: 16px; opacity: 0.3; }
+  .sidebar-links a:hover { opacity: 1; color: var(--gold-lt); padding-left: 6px; }
+  .sidebar-links a.active { opacity: 1; color: var(--gold-lt); }
+  .sidebar-footer { padding: 28px; border-top: 1px solid rgba(255,255,255,0.08); }
+  .sidebar-cta { width: 100%; background: var(--gold); color: var(--navy); border: none; padding: 18px; font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; }
+
+  /* ── PAGE HERO ── */
+  .page-hero { padding-top: 76px; min-height: 340px; display: flex; align-items: flex-end; position: relative; background: var(--navy-deep); }
+  .page-hero-inner { max-width: 1280px; margin: 0 auto; padding: 64px 40px; width: 100%; }
+  .page-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.42em; text-transform: uppercase; color: var(--gold-lt); display: flex; align-items: center; gap: 12px; margin-bottom: 16px; opacity: 0.8; }
+  .page-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold-lt); opacity: 0.5; }
+  .page-hero h1 { font-family: var(--serif); font-size: clamp(36px, 5vw, 64px); font-weight: 700; color: var(--white); letter-spacing: -0.02em; line-height: 1.1; }
+  .page-hero h1 em { font-style: italic; font-weight: 400; color: var(--gold-lt); }
+
+  /* ── FILTER TABS ── */
+  .filter-bar { background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top: 76px; z-index: 40; }
+  .filter-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; display: flex; gap: 4px; overflow-x: auto; }
+  .filter-btn { background: none; border: none; padding: 18px 24px; font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.45); cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+  .filter-btn:hover { color: var(--white); }
+  .filter-btn.active { color: var(--gold-lt); border-bottom-color: var(--gold-lt); }
+
+  /* ── MASONRY GALLERY ── */
+  .gallery-section { max-width: 1280px; margin: 0 auto; padding: 48px 40px 120px; }
+
+  .gallery-grid {
+    columns: 3;
+    column-gap: 8px;
+  }
+
+  .gallery-item {
+    break-inside: avoid;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: block;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    display: block;
+    transition: transform 0.6s ease;
+    filter: brightness(0.85);
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.05);
+    filter: brightness(1);
+  }
+
+  .gallery-item-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,17,58,0.7) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.35s;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+  }
+  .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+
+  .gallery-item-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  /* ── LIGHTBOX ── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .lightbox.open { opacity: 1; pointer-events: all; }
+
+  .lightbox-inner { position: relative; max-width: 90vw; max-height: 90vh; }
+  .lightbox-img { max-width: 90vw; max-height: 85vh; object-fit: contain; display: block; }
+
+  .lightbox-close {
+    position: absolute;
+    top: -48px; right: 0;
+    background: none; border: none;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer; line-height: 0;
+    transition: color 0.2s;
+  }
+  .lightbox-close:hover { color: var(--white); }
+  .lightbox-close .material-symbols-outlined { font-size: 32px; }
+
+  .lightbox-caption {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.1);
+    border: none; color: var(--white);
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; line-height: 0;
+    transition: background 0.2s;
+  }
+  .lightbox-nav:hover { background: rgba(255,255,255,0.2); }
+  .lightbox-prev { left: -64px; }
+  .lightbox-next { right: -64px; }
+  .lightbox-nav .material-symbols-outlined { font-size: 24px; }
+
+  /* ── CHATBOT ── */
+  .chat-widget { position: fixed; bottom: 104px; right: 32px; width: 360px; background: var(--white); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 24px 64px rgba(0,0,0,0.4); display: flex; flex-direction: column; z-index: 45; opacity: 0; transform: translateY(16px) scale(0.97); pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; }
+  .chat-widget.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
+  .chat-header { background: var(--navy); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+  .chat-header-info { display: flex; align-items: center; gap: 12px; }
+  .chat-avatar { width: 36px; height: 36px; background: var(--gold); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 11px; font-weight: 700; }
+  .chat-name { font-size: 13px; font-weight: 600; color: var(--white); }
+  .chat-status { font-size: 10px; color: var(--gold-lt); margin-top: 2px; }
+  .chat-close { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.6); line-height: 0; padding: 4px; transition: color 0.2s; }
+  .chat-close:hover { color: var(--white); }
+  .chat-close .material-symbols-outlined { font-size: 18px; }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; min-height: 200px; max-height: 240px; }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .msg { max-width: 85%; padding: 10px 14px; font-size: 13px; line-height: 1.55; font-weight: 300; color: var(--ink); }
+  .msg-bot { background: var(--surface); align-self: flex-start; border-radius: 0 12px 12px 12px; }
+  .msg-user { background: var(--navy); color: var(--white); align-self: flex-end; border-radius: 12px 12px 0 12px; }
+  .msg-typing { background: var(--surface); align-self: flex-start; border-radius: 0 12px 12px 12px; padding: 12px 16px; }
+  .typing-dots { display: flex; gap: 4px; }
+  .typing-dots span { width: 6px; height: 6px; background: var(--muted); border-radius: 50%; animation: typingBounce 1.2s infinite; }
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+  .chat-suggestions { padding: 8px 16px 12px; display: flex; flex-wrap: wrap; gap: 6px; border-top: 1px solid var(--border); flex-shrink: 0; }
+  .chat-suggestions button { background: none; border: 1px solid var(--border); padding: 5px 12px; font-family: var(--sans); font-size: 10px; font-weight: 500; color: var(--muted); cursor: pointer; border-radius: 20px; transition: all 0.2s; white-space: nowrap; }
+  .chat-suggestions button:hover { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .chat-input-wrap { display: flex; align-items: center; border-top: 1px solid var(--border); padding: 10px 12px; gap: 8px; flex-shrink: 0; }
+  .chat-input { flex: 1; border: none; outline: none; font-family: var(--sans); font-size: 13px; color: var(--navy); background: transparent; padding: 6px 0; }
+  .chat-input::placeholder { color: rgba(26,24,16,0.3); }
+  .chat-send { background: var(--gold); color: var(--white); border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; line-height: 0; flex-shrink: 0; }
+  .chat-send:hover { background: var(--navy); }
+  .chat-send .material-symbols-outlined { font-size: 16px; }
+  .fab { position: fixed; bottom: 32px; right: 32px; width: 58px; height: 58px; background: var(--gold-lt); color: var(--navy); border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 40; box-shadow: 0 8px 28px rgba(160,120,48,0.38); transition: transform 0.25s; }
+  .fab:hover { transform: scale(1.08); }
+  .fab .material-symbols-outlined { font-size: 24px; font-variation-settings: 'FILL' 1, 'wght' 400; }
+  .fab.has-notification::after { content: ''; position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; background: #e53e3e; border-radius: 50%; border: 2px solid var(--cream); }
+  @media (max-width: 480px) { .chat-widget { right: 12px; left: 12px; width: auto; bottom: 96px; } }
+
+  /* ── SCROLL TOP ── */
+  .scroll-top { position: fixed; bottom: 100px; right: 32px; width: 46px; height: 46px; background: rgba(255,255,255,0.15); color: var(--white); border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 40; opacity: 0; transform: translateY(12px); transition: opacity 0.3s, transform 0.3s, background 0.2s; pointer-events: none; }
+  .scroll-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+  .scroll-top:hover { background: var(--gold); }
+  .scroll-top .material-symbols-outlined { font-size: 20px; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--navy-deep); color: var(--white); padding: 80px 40px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+  .footer-links { max-width: 1280px; margin: 0 auto; display: flex; justify-content: center; gap: 32px; padding: 32px 0; flex-wrap: wrap; }
+  .footer-links a { font-size: 12px; color: rgba(250,249,246,0.45); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold-lt); }
+  .footer-bottom { max-width: 1280px; margin: 0 auto; padding: 24px 0; border-top: 1px solid rgba(250,249,246,0.08); text-align: center; }
+  .footer-bottom p { font-size: 10px; font-weight: 300; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(250,249,246,0.3); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) { .gallery-grid { columns: 2; } }
+  @media (max-width: 768px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .nav-inner { padding: 0 20px; }
+    .gallery-section { padding: 32px 16px 80px; }
+    .gallery-grid { columns: 1; }
+    .page-hero-inner { padding: 48px 20px; }
+    .filter-inner { padding: 0 20px; }
+    .lightbox-prev { left: -8px; }
+    .lightbox-next { right: -8px; }
+    footer { padding: 64px 20px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo">Owerri <span>Grandeur</span></div>
+  <div class="loader-bar"></div>
+  <div class="loader-tagline">The Heartland Estate</div>
+</div>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar" aria-hidden="true">
+  <div class="sidebar-header">
+    <a href="index.html" class="sidebar-logo">Owerri Grandeur</a>
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <ul class="sidebar-links">
+    <li><a href="index.html">Home <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="rooms.html">Rooms <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="locations.html">Locations <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="dining.html">Dining <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="gallery.html" class="active">Gallery <span class="material-symbols-outlined">arrow_forward</span></a></li>
+    <li><a href="contact.html">Contact <span class="material-symbols-outlined">arrow_forward</span></a></li>
+  </ul>
+  <div class="sidebar-footer"><button class="sidebar-cta">Book Now</button></div>
+</aside>
+
+<nav class="topnav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Owerri Grandeur</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="rooms.html">Rooms</a></li>
+      <li><a href="dining.html">Dining</a></li>
+      <li><a href="gallery.html" class="active">Gallery</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-cta">Book Now</button>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <p class="page-eyebrow">The Estate in Pictures</p>
+    <h1>Our <em>Gallery</em></h1>
+  </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <button class="filter-btn active" onclick="filterGallery('all', this)">All</button>
+    <button class="filter-btn" onclick="filterGallery('rooms', this)">Rooms &amp; Suites</button>
+    <button class="filter-btn" onclick="filterGallery('dining', this)">Dining</button>
+    <button class="filter-btn" onclick="filterGallery('amenities', this)">Amenities</button>
+    <button class="filter-btn" onclick="filterGallery('exterior', this)">Exterior</button>
+  </div>
+</div>
+
+<!-- Gallery Grid -->
+<section class="gallery-section">
+  <div class="gallery-grid" id="galleryGrid">
+
+    <div class="gallery-item" data-category="exterior" data-label="Hotel Exterior" onclick="openLightbox(0)">
+      <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80&fit=crop" alt="Owerri Grandeur hotel exterior"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Hotel Exterior</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="rooms" data-label="Executive Suite" onclick="openLightbox(1)">
+      <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80&fit=crop" alt="Executive Suite"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Executive Suite</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="dining" data-label="Imo Table Restaurant" onclick="openLightbox(2)">
+      <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80&fit=crop" alt="Imo Table Restaurant"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Imo Table Restaurant</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="amenities" data-label="Skyline Infinity Pool" onclick="openLightbox(3)">
+      <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&q=80&fit=crop" alt="Skyline Infinity Pool"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Skyline Infinity Pool</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="rooms" data-label="Luxury Suite Bathroom" onclick="openLightbox(4)">
+      <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80&fit=crop" alt="Luxury Suite Interior"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Suite Interior</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="dining" data-label="The Verandah" onclick="openLightbox(5)">
+      <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80&fit=crop" alt="The Verandah"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">The Verandah</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="amenities" data-label="Heritage Lounge" onclick="openLightbox(6)">
+      <img src="https://images.unsplash.com/photo-1621293954908-907159247fc8?w=800&q=80&fit=crop" alt="Heritage Lounge"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Heritage Lounge</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="dining" data-label="Oguta Grill" onclick="openLightbox(7)">
+      <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80&fit=crop" alt="Oguta Grill"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Oguta Grill</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="rooms" data-label="Presidential Suite" onclick="openLightbox(8)">
+      <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&q=80&fit=crop" alt="Presidential Suite"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Presidential Suite</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="dining" data-label="The 1984 Bar" onclick="openLightbox(9)">
+      <img src="https://images.unsplash.com/photo-1546171753-97d7676e4602?w=800&q=80&fit=crop" alt="The 1984 Bar"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">The 1984 Bar</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="amenities" data-label="Wellness Sanctuary" onclick="openLightbox(10)">
+      <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80&fit=crop" alt="Wellness Sanctuary"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Wellness Sanctuary</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="exterior" data-label="Hotel Grounds" onclick="openLightbox(11)">
+      <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80&fit=crop" alt="Hotel Grounds"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Hotel Grounds</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="rooms" data-label="Heartland Deluxe Room" onclick="openLightbox(12)">
+      <img src="https://images.unsplash.com/photo-1505693314120-0d443867891c?w=800&q=80&fit=crop" alt="Heartland Deluxe Room"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Heartland Deluxe</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="dining" data-label="Mama's Kitchen" onclick="openLightbox(13)">
+      <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80&fit=crop" alt="Mama's Kitchen"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Mama's Kitchen</span></div>
+    </div>
+
+    <div class="gallery-item" data-category="exterior" data-label="Lobby Entrance" onclick="openLightbox(14)">
+      <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&q=80&fit=crop" alt="Lobby Entrance"/>
+      <div class="gallery-item-overlay"><span class="gallery-item-label">Lobby Entrance</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOnBg(event)">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeLightbox()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <button class="lightbox-nav lightbox-prev" onclick="changeLightbox(-1)">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt=""/>
+    <button class="lightbox-nav lightbox-next" onclick="changeLightbox(1)">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </button>
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="rooms.html">Rooms</a>
+    <a href="dining.html">Dining</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms &amp; Conditions</a>
+    <a href="contact.html">Contact Us</a>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 Owerri Grandeur. All Rights Reserved. Crafted for Distinction.</p>
+  </div>
+</footer>
+
+<!-- FAB -->
+<button class="fab" id="chatToggle" aria-label="Open concierge chat">
+  <span class="material-symbols-outlined" id="chatIcon">support_agent</span>
+</button>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+  <span class="material-symbols-outlined">arrow_upward</span>
+</button>
+
+<!-- Chatbot Widget -->
+<div class="chat-widget" id="chatWidget" aria-hidden="true">
+  <div class="chat-header">
+    <div class="chat-header-info">
+      <div class="chat-avatar">OG</div>
+      <div>
+        <div class="chat-name">Owerri Grandeur Concierge</div>
+        <div class="chat-status">&#9679; Online now</div>
+      </div>
+    </div>
+    <button class="chat-close" id="chatClose" aria-label="Close chat">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-suggestions" id="chatSuggestions">
+    <button onclick="sendSuggestion(this)">Room availability</button>
+    <button onclick="sendSuggestion(this)">Check-in times</button>
+    <button onclick="sendSuggestion(this)">Dining options</button>
+    <button onclick="sendSuggestion(this)">Pricing</button>
+  </div>
+  <div class="chat-input-wrap">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Ask us anything…" autocomplete="off"/>
+    <button class="chat-send" id="chatSend" aria-label="Send">
+      <span class="material-symbols-outlined">send</span>
+    </button>
+  </div>
+</div>
+
+<script>
+
+  /* ── LOADING SCREEN ── */
+  window.addEventListener('load', function() {
+    var loader = document.getElementById('pageLoader');
+    if (loader) { setTimeout(function() { loader.classList.add('hidden'); }, 1000); }
+  });
+
+  /* ── SIDEBAR ── */
+  var hamburger = document.getElementById('hamburger');
+  var sidebar   = document.getElementById('sidebar');
+  var overlay   = document.getElementById('sidebarOverlay');
+  var closeBtn  = document.getElementById('sidebarClose');
+  function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('visible'); hamburger.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('visible'); hamburger.classList.remove('open'); document.body.style.overflow = ''; }
+  hamburger.addEventListener('click', openSidebar);
+  closeBtn.addEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeSidebar(); closeLightbox(); closeChat(); } });
+
+  /* ── GALLERY FILTER ── */
+  function filterGallery(category, btn) {
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelectorAll('.gallery-item').forEach(function(item) {
+      item.style.display = (category === 'all' || item.dataset.category === category) ? '' : 'none';
+    });
+  }
+
+  /* ── LIGHTBOX ── */
+  var allItems = [];
+  var currentLightboxIndex = 0;
+
+  /* Build the items array from the DOM */
+  document.querySelectorAll('.gallery-item').forEach(function(item, i) {
+    allItems.push({
+      src:   item.querySelector('img').src,
+      label: item.dataset.label || ''
+    });
+    /* update onclick index */
+    item.setAttribute('onclick', 'openLightbox(' + i + ')');
+  });
+
+  function openLightbox(index) {
+    currentLightboxIndex = index;
+    var lightbox = document.getElementById('lightbox');
+    document.getElementById('lightboxImg').src    = allItems[index].src;
+    document.getElementById('lightboxCaption').textContent = allItems[index].label;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeLightboxOnBg(e) {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  }
+
+  function changeLightbox(dir) {
+    /* Only navigate visible items */
+    var visible = [];
+    document.querySelectorAll('.gallery-item').forEach(function(item, i) {
+      if (item.style.display !== 'none') visible.push(i);
+    });
+    var pos = visible.indexOf(currentLightboxIndex);
+    var next = visible[(pos + dir + visible.length) % visible.length];
+    openLightbox(next);
+  }
+
+  /* Arrow key navigation */
+  document.addEventListener('keydown', function(e) {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'ArrowRight') changeLightbox(1);
+    if (e.key === 'ArrowLeft')  changeLightbox(-1);
+  });
+
+  /* ── CHATBOT ── */
+  var chatWidget   = document.getElementById('chatWidget');
+  var chatToggle   = document.getElementById('chatToggle');
+  var chatClose    = document.getElementById('chatClose');
+  var chatInput    = document.getElementById('chatInput');
+  var chatSend     = document.getElementById('chatSend');
+  var chatMessages = document.getElementById('chatMessages');
+  var chatIcon     = document.getElementById('chatIcon');
+  var chatOpen     = false;
+
+  var responses = [
+    { keywords: ['room','suite','available','book','reserve'], answer: 'Rooms start from <strong>&#8358;52,000/night</strong>. See our <a href="rooms.html" style="color:var(--gold)">Rooms page</a> for full details.' },
+    { keywords: ['check-in','checkin','arrive'], answer: 'Standard check-in from <strong>2:00 PM</strong>. Early check-in available on request.' },
+    { keywords: ['check-out','checkout','leave'], answer: 'Standard check-out at <strong>12:00 PM</strong>. Late check-out subject to availability.' },
+    { keywords: ['dining','restaurant','food','eat'], answer: 'Five dining experiences &#8212; see our <a href="dining.html" style="color:var(--gold)">Dining page</a>.' },
+    { keywords: ['location','address','where','owerri'], answer: '<strong>12 Wetheral Road, New Owerri, Imo State</strong>. Free airport transfers available.' },
+    { keywords: ['price','cost','rate','how much'], answer: 'Rates from <strong>&#8358;52,000/night</strong>. All include VAT and breakfast.' },
+    { keywords: ['pool','swim'], answer: 'Skyline Infinity Pool open <strong>7AM&#8211;9PM</strong> daily for guests.' },
+    { keywords: ['hello','hi','hey'], answer: 'Welcome to Owerri Grandeur! How can I help you today? &#128522;' },
+    { keywords: ['thank','thanks'], answer: 'Our pleasure! Anything else I can help with? &#128522;' }
+  ];
+
+  function getResponse(input) {
+    var lower = input.toLowerCase();
+    for (var i = 0; i < responses.length; i++) {
+      for (var j = 0; j < responses[i].keywords.length; j++) {
+        if (lower.indexOf(responses[i].keywords[j]) !== -1) return responses[i].answer;
+      }
+    }
+    return 'Please call <strong>+234 (0) 83 700 0000</strong> or email <strong>hello@owerrigrandeur.com</strong> for assistance.';
+  }
+
+  function addMessage(text, isUser) {
+    var msg = document.createElement('div');
+    msg.className = 'msg ' + (isUser ? 'msg-user' : 'msg-bot');
+    msg.innerHTML = text;
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function botReply(input) {
+    var typing = document.createElement('div');
+    typing.className = 'msg-typing';
+    typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+    chatMessages.appendChild(typing);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    setTimeout(function() { chatMessages.removeChild(typing); addMessage(getResponse(input), false); }, 900);
+  }
+
+  function sendMessage() {
+    var text = chatInput.value.trim();
+    if (!text) return;
+    addMessage(text, true);
+    chatInput.value = '';
+    document.getElementById('chatSuggestions').style.display = 'none';
+    botReply(text);
+  }
+
+  function sendSuggestion(btn) {
+    addMessage(btn.textContent, true);
+    document.getElementById('chatSuggestions').style.display = 'none';
+    botReply(btn.textContent);
+  }
+
+  function openChat() {
+    chatOpen = true; chatWidget.classList.add('open'); chatIcon.textContent = 'close';
+    chatToggle.classList.remove('has-notification');
+    if (chatMessages.children.length === 0) {
+      setTimeout(function() { addMessage('&#128075; Welcome! Ask me anything about our rooms, dining, pricing or your stay.', false); }, 300);
+    }
+  }
+
+  function closeChat() { chatOpen = false; chatWidget.classList.remove('open'); chatIcon.textContent = 'support_agent'; }
+
+  chatToggle.addEventListener('click', function() { chatOpen ? closeChat() : openChat(); });
+  chatClose.addEventListener('click', closeChat);
+  chatInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendMessage(); });
+  chatSend.addEventListener('click', sendMessage);
+  setTimeout(function() { if (!chatOpen) chatToggle.classList.add('has-notification'); }, 4000);
+
+  /* ── SCROLL TOP ── */
+  window.addEventListener('scroll', function() {
+    document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
+  });
+
+</script>
+</body>
+</html>
